@@ -7,18 +7,16 @@ const {authenticateUser,authorizeUser} = require('../Middlewares/auth');
 
 const questionController = require('../Controllers/questionController');
 
-// Apply authentication middleware to protect the routes below
-
 // Create a new question
-router.post('/questions', questionController.createQuestion);
+router.post('/questions',authenticateUser, questionController.createQuestion);
 
-// Edit a question (only the owner can edit)
+// Edit a question (only the author can edit)
 router.put('/questions/:questionId', authenticateUser,authorizeUser,questionController.editQuestion);
 
 // Answer a question
-router.post('/questions/:questionId/answers', questionController.answerQuestion);
+router.post('/questions/:questionId/answers',authenticateUser, questionController.answerQuestion);
 
-// Mark an answer as accepted (only the owner can mark)
-router.put('/questions/:questionId/answers/:answerId/accept', questionController.markAnswerAsAccepted);
+// Mark an answer as accepted (only the author can mark)
+router.put('/questions/:questionId/answers/:answerId/accept', authenticateUser,authorizeUser,questionController.markAnswerAsAccepted);
 
 module.exports = router;
