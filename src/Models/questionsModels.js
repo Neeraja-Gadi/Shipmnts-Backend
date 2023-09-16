@@ -15,13 +15,12 @@ const questionSchema = new mongoose.Schema({
      ref: 'User', 
      required: true
      },
-//   answers: [{ type: mongoose.Schema.Types.ObjectId, 
-//     ref: 'Answer'
-//  }],
-  // acceptedAnswer: { 
-  //   type: mongoose.Schema.Types.ObjectId,
-  //    ref: 'Answer'
-  //    },
+  AcceptedAnswerId: { 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Answer', 
+    },
+
 });
 
 module.exports = mongoose.model('Question', questionSchema);
+
