@@ -1,10 +1,12 @@
 const jwt = require('jsonwebtoken');
+const Question = require('../Models/questionsModels');
+
 
 // Authentication middleware
 const  authenticateUser = async (req, res, next) => {
   // Get the token from the request header or query parameter
   let token = req.header('x-auth-token') ;
-  console.log(token)
+  // console.log(token)
   // Check if the token is missing
   if (!token) {
     return res.status(401).json({ message: 'Unauthorized - No token provided' });
@@ -16,9 +18,7 @@ const  authenticateUser = async (req, res, next) => {
     
     // Attach the decoded user information to the request object
     req.user = decoded;
-
-    // Continue with the next middleware or route handler
-     res.send("verified")
+    next()
   } catch (error) {
     console.error(error.message);
     res.status(401).json({ message: 'Unauthorized - Invalid token' });
@@ -26,13 +26,17 @@ const  authenticateUser = async (req, res, next) => {
 };
 
 // Authorization middleware for the owner of a resource
-const authorizeUser = (req, res, next) => {
-  // Check if the authenticated user is the owner/admin of the resource
-  if (req.user && req.user._id.toString() === req.params.userId) {
-    next(); // User is authorized
-  } else {
-    res.status(403).json({ message: 'Forbidden - Access denied' });
-  }
+const authorizeUser = async (req, res, next) => {
+
+  const { questionId } = req.params;
+
+      const question = await Question.findById(questionId);
+
+      if (question.user.toString() !==  req.user.userId.toString()) {
+          return res.status(403).json({ message: 'Access denied' });
+      }
+      next()
+  
 };
 
 module.exports = {
