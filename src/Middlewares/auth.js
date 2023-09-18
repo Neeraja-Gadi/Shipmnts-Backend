@@ -16,7 +16,7 @@ const  authenticateUser = async (req, res, next) => {
 
   try {
     // Verify the token
-    const decoded = jwt.verify(token, 'Shipmnts',); 
+    const decoded = jwt.verify(token, 'Shipmnts'); 
     
     // Attach the decoded user information to the request object
     req.user = decoded;
