@@ -3,13 +3,15 @@ const Question = require('../Models/questionsModels');
 
 
 // Authentication middleware
+
 const  authenticateUser = async (req, res, next) => {
+
   // Get the token from the request header or query parameter
   let token = req.header('x-auth-token') ;
-  // console.log(token)
+  
   // Check if the token is missing
   if (!token) {
-    return res.status(401).json({ message: 'Unauthorized - No token provided' });
+    return res.status(401).json({status:false, message: 'Unauthorized - No token provided' });
   }
 
   try {
@@ -21,11 +23,12 @@ const  authenticateUser = async (req, res, next) => {
     next()
   } catch (error) {
     console.error(error.message);
-    res.status(401).json({ message: 'Unauthorized - Invalid token' });
+    res.status(401).json({status:false, message: 'Unauthorized - Invalid token' });
   }
 };
 
-// Authorization middleware for the owner of a resource
+// Authorization middleware 
+
 const authorizeUser = async (req, res, next) => {
 
   const { questionId } = req.params;
@@ -33,7 +36,7 @@ const authorizeUser = async (req, res, next) => {
       const question = await Question.findById(questionId);
 
       if (question.user.toString() !==  req.user.userId.toString()) {
-          return res.status(403).json({ message: 'Access denied' });
+          return res.status(403).json({status:false, message: 'Access denied' });
       }
       next()
   
