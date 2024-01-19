@@ -2,6 +2,7 @@ const Question = require('../Models/questionsModels');
 const Answer = require('../Models/answerModel');
 
 // Create a new question
+
 const createQuestion = async (req, res) => {
   try {
     const { title, body, tags } = req.body;
